@@ -1,0 +1,33 @@
+name: Build Tauri App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Tauri
+        run: npm run tauri build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cronograma-build
+          path: src-tauri/target/release/bundle/
